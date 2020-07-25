@@ -13,8 +13,8 @@
 <p id="message"></p>
 <textarea id="output" rows="10" cols="60"></textarea>
 <h2>A matplotlib figure</h2>
-<div id="pyplotdiv"><img id="pyplotfigure"/></div>
-
+<div style="display:none;" id="pyplotdiv"><img id="pyplotfigure"/></div>
+<div style="display:none;" id="main"></div>
 <button id="button-to-increment" />
 <script type="text/javascript">
     function display(text) {
@@ -52,29 +52,15 @@
 
     languagePluginLoader.then(function () {
         let result;
-        document.getElementById('status').innerHTML = 'pyodide is ready.';
-        pyeval('import sys\nsys.version');
+        //document.getElementById('status').innerHTML = 'pyodide is ready.';
+        //pyeval('import sys\nsys.version');
 
-        // Show that successive commands are all running inside the same interpreter
-        pyeval('a = 3');
-        pyeval('b = 10');
-        pyeval('a + b');
 
         // Demonstrate loading a Python function "fib()" from a file.
         pyload('./fib.py');
 
-        // We read a Python function "fib()".  Now let's load it into the interpreter.
-        //pyeval(fileContents);
 
-        // Now let's call the fib() function
-        pyeval('"Fibonacci 12 = {0}".format(fib(12))');
-
-        // Note that if you use Python's print, it will print on the Javascript console.
-        // However, the printed string will not be returned by Python as the result of the print
-        // statement, so pyeval will display only 'undefined'
-        pyeval('print("Fibonacci 10 = {0}".format(fib(10)))');
-
-        pyodide.loadPackage(["matplotlib", "numpy", "sympy"]).then(() => {
+        pyodide.loadPackage(["matplotlib", "pandas", "seaborn","sklearn"]).then(() => {
             display('<loaded numpy>');
             pyeval('import numpy as np');
             // Confirm we can call numpy code.  Note that this prints in the HTML textarea as
@@ -98,7 +84,7 @@
             // Display the python global variable holding the serialized figure into the
             // HTML img tag.
             document.getElementById("pyplotfigure").src=pyodide.globals.img_str;
-            
+
             // Demonstrate some computational geometry
             pyeval(`
                 from sympy import Polygon
@@ -128,12 +114,14 @@
         pyeval(`
                 from js import document
                 button = document.getElementById("button-to-increment")
+                imageDiv = document.getElementById("pyplotdiv")
                 button.textContent = "Click me!"
                 count = 0
                 def onclick(evt):
+                    imageDiv.setAttribute("style", "")
                     global count
                     count += 1
-                    button.innerText = "I've been changed " + str(count) + " times!"  
+                    button.innerText = "I've been changed " + str(count) + " times!"
                 button.onclick = onclick`
            );
         //
