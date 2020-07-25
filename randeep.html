@@ -15,7 +15,7 @@
 <h2>A matplotlib figure</h2>
 <div id="pyplotdiv"><img id="pyplotfigure"/></div>
 
-
+<button id="button-to-increment" />
 <script type="text/javascript">
     function display(text) {
         var element = document.getElementById('output');
@@ -126,16 +126,15 @@
 
         });
         pyeval(`
-                from js import document, iodide
-                button = iodide.output.element('button')
+                from js import document
+                button = document.getElementById("button-to-increment")
                 button.textContent = "Click me!"
+                count = 0
                 def onclick(evt):
-                  print("click")
-                  if document.body.style.backgroundColor == 'rgb(255, 255, 255)':
-                    document.body.style.backgroundColor = '#ff0000'
-                  else:
-                    document.body.style.backgroundColor = '#ffffff'
-                button.addEventListener('click', onclick)`
+                    global count
+                    count += 1
+                    button.innerText = "I've been changed " + str(count) + " times!"  
+                button.onclick = onclick`
            );
         //
 
