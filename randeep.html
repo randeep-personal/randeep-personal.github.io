@@ -123,7 +123,9 @@
                 #   Then try to follow the instructions in https://pyodide.readthedocs.io/en/latest/new_packages.html to
                 #   port scikit-geometry to pyiodide.
             `);
-            pyeval(`
+
+        });
+        pyeval(`
                 from js import iodide
                 button = iodide.output.element('button')
                 button.textContent = "Click me!"
@@ -133,9 +135,8 @@
                     document.body.style.backgroundColor = '#ff0000'
                   else:
                     document.body.style.backgroundColor = '#ffffff'
-                button.addEventListener('click', onclick)
-            `);
-        });
+                button.addEventListener('click', onclick)`
+           );
         //
 
     });
